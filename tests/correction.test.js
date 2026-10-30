@@ -6,6 +6,14 @@ const core=require('../correction-core.js');
 global.window={};
 require('../corrections.js');
 require('../official-2018.js');
+require('../official-2019-2020.js');
+require('../official-2021.js');
+require('../official-2017d.js');
+require('../official-2022.js');
+require('../official-2024.js');
+require('../official-2019-nef.js');
+require('../secondary-2023.js');
+require('../preliminary-2017u.js');
 require('../research-answers.js');
 const curated=global.window.ATLAS_CORRECTIONS;
 const questions=require('../atlas_iades_1280_transcritas.json');
@@ -45,14 +53,14 @@ test('gabarito informado pelo usuário não substitui fonte oficial',()=>{
  const wrong={df2026:{source:'rascunho',items:{1:'A',78:'B'}}};
  assert.equal(core.resolve(q('df2026',1),curated,wrong).key,'D');
  assert.equal(core.resolve(q('df2026',78),curated,wrong).key,'C');
- const unverified={df2017u:{source:'rascunho',items:{11:'C'}}};
- const other=core.resolve(q('df2017u',11),curated,unverified);
+ const unverified={sp2022:{source:'rascunho',items:{1:'C'}}};
+ const other=core.resolve(q('sp2022',1),curated,unverified);
  assert.equal(other.status,'informado_nao_verificado');
  assert.equal(other.hasVerifiedOfficial,false);
  assert.equal(core.evaluate(other,'C'),'acertou');
 });
 test('sem gabarito deve permanecer sem classificação de acerto',()=>{
- const c=core.resolve(q('df2017u',11),curated,{});
+ const c=core.resolve(q('sp2022',1),curated,{});
  assert.equal(c.status,'sem_gabarito');
  assert.equal(core.evaluate(c,'C'),'sem_gabarito');
  assert.equal(core.optionStatus(c,'C'),'pendente');
@@ -84,7 +92,7 @@ test('resoluções das questões anuladas e retificada permanecem identificadas'
 });
 test('cobertura diferencia respostas oficiais, independentes e pendentes',()=>{
  const cov=core.coverage(questions.questions,curated);
- assert.deepEqual(cov,{total:1280,officialValid:194,officialAnnulled:5,commented:23,missingOfficial:1081,commentPending:1257,independent:13,unresolved:1068,withAnswer:212});
+ assert.deepEqual(cov,{total:1280,officialValid:1010,officialAnnulled:9,commented:23,missingOfficial:261,commentPending:1257,independent:10,secondary:130,unresolved:121,withAnswer:1159});
 });
 test('correção de itens CERTO/ERRADO aceita C e E',()=>{
  const c={key:'E',status:'informado_nao_verificado',isAnnulled:false,hasVerifiedOfficial:false};
@@ -114,7 +122,7 @@ test('resolução independente não é rotulada como oficial',()=>{
  assert.equal(core.optionStatus(r,'C'),'proposta');
 });
 test('resposta técnica fundamentada prevalece sobre cadastro pessoal, sem virar gabarito oficial',()=>{
- const r=core.resolve(q('df2024',2),curated,{df2024:{items:{2:'A'}}});
+ const r=core.resolve(q('sp2023',12),curated,{sp2023:{items:{12:'A'}}});
  assert.equal(r.key,'C');
  assert.equal(r.source,'analise_independente');
  assert.equal(r.discrepancy,true);
@@ -138,5 +146,46 @@ test('proposta com ambiguidade possível traz aviso e confiança reduzida',()=>{
  const r=core.resolve(q('df2024',1),curated,{});
  assert.equal(r.key,'D');
  assert.equal(r.possibleAmbiguity,true);
- assert.equal(r.confidence,'moderada');
+ assert.equal(curated.independentAnswers['df2024-001'].confidence,'moderada');
+ assert.equal(r.hasVerifiedOfficial,true);
+});
+
+test('gabaritos definitivos de seis provas recentes estão completos, distinguindo anuladas',()=>{
+ const expected={df2017d:120,df2019ti:120,df2019nef:120,df2020:120,df2021ti:120,df2022:120,df2024:100};
+ for(const [exam,count] of Object.entries(expected)){
+  const off=curated.officialKeys[exam];
+  assert.equal(Object.keys(off.answers).length,count,exam);
+  assert.ok(off.source.url.startsWith('https://www.iades.com.br/'),exam);
+  for(const [n,v] of Object.entries(off.answers))assert.ok(q(exam,+n).options.includes(v)||v==='#',exam+' '+n);
+  assert.equal(core.resolve(q(exam,1),curated,{}).hasVerifiedOfficial,true,exam);
+ }
+});
+test('gabarito de Saúde do Adulto e Idoso 2022 reconhece questão 109 anulada',()=>{
+ const r=core.resolve(q('df2022',109),curated,{});
+ assert.equal(r.key,'#');
+ assert.equal(r.isAnnulled,true);
+ assert.equal(core.evaluate(r,'C'),'anulada');
+});
+test('gabarito definitivo Atenção Cardíaca 2024 prevalece sobre proposta independente anterior',()=>{
+ const r=core.resolve(q('df2024',1),curated,{});
+ assert.equal(r.hasVerifiedOfficial,true);
+ assert.equal(r.key,'D');
+ assert.equal(r.possibleAmbiguity,true);
+});
+test('gabarito preliminar IADES 2017 Tipo U é provisório, não definitivo',()=>{
+ const r=core.resolve(q('df2017u',11),curated,{});
+ assert.equal(r.key,'C');
+ assert.equal(r.hasVerifiedOfficial,false);
+ assert.equal(r.hasSecondary,true);
+ assert.equal(r.status,'gabarito_preliminar_sujeito_a_recursos');
+});
+test('transcrição SP 2023 não é autenticação primária do gabarito definitivo',()=>{
+ const r=core.resolve(q('sp2023',1),curated,{});
+ assert.equal(r.key,'E');
+ assert.equal(r.hasVerifiedOfficial,false);
+ assert.equal(r.hasSecondary,true);
+ assert.equal(r.status,'reproducao_secundaria_nao_autenticada');
+});
+test('item sem chave 2022 SP permanece pendente',()=>{
+ assert.equal(core.resolve(q('sp2022',1),curated,{}).status,'sem_gabarito');
 });
