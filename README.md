@@ -129,7 +129,7 @@ Arquivos principais: `history-core.js` (indexação e filtros), `app.js` (págin
 
 ## Correção e comentários: cobertura em 30/10/2026
 
-**Todas as 1.280 questões possuem uma letra/resposta de referência atribuída**, mas isso **NÃO** significa que todas foram resolvidas independentemente nem que exista justificativa científico-técnica individual para todas. Apenas **29** questões têm comentário completo de cada alternativa com fontes. O aplicativo diferencia explicitamente os níveis de procedência das respostas.
+**Todas as 1.280 questões possuem uma letra/resposta de referência atribuída**, mas isso **NÃO** significa que todas foram resolvidas independentemente nem que exista justificativa científico-técnica individual para todas. Apenas **33** questões têm comentário completo de cada alternativa com fontes. O aplicativo diferencia explicitamente os níveis de procedência das respostas.
 
 | Situação da resposta (prioridade) | Questões |
 | --- | ---: |
@@ -140,7 +140,7 @@ Arquivos principais: `history-core.js` (indexação e filtros), `app.js` (págin
 | Sem qualquer letra/resposta atribuída | **0** |
 | **TOTAL de questões com resposta de referência** | **1.280** |
 
-**Comentários:** 29 de 1.280 possuem fundamentação alternativa por alternativa; as outras **1.251** ainda precisam de análises científicas individuais. **O gabarito da banca não equivale a justificativa científica.** Sem comentário, o aplicativo mostra a resposta de referência e identifica as explicações como pendentes, em vez de inventá-las.
+**Comentários:** 33 de 1.280 possuem fundamentação alternativa por alternativa; as outras **1.247** ainda precisam de análises científicas individuais. **O gabarito da banca não equivale a justificativa científica.** Sem comentário, o aplicativo mostra a resposta de referência e identifica as explicações como pendentes, em vez de inventá-las.
 
 ### Referências oficiais definitivas
 
