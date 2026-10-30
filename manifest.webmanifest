@@ -1,0 +1,18 @@
+{
+  "name": "Atlas IADES — SESDF",
+  "short_name": "Atlas IADES",
+  "description": "Residência em Enfermagem: provas IADES e revisões",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#10253a",
+  "theme_color": "#10253a",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}
