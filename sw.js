@@ -11,5 +11,5 @@ self.addEventListener('fetch',event=>{
  if(event.request.method!=='GET')return;
  const url=new URL(event.request.url);
  if(url.origin!==self.location.origin&&url.href!==ZIPLIB)return;
- event.respondWith((async()=>{const cache=await caches.open(CACHE);let cached=await cache.match(event.request);if(cached)return cached;try{const response=await fetch(event.request);if(response.ok||response.type==='opaque')cache.put(event.request,response.clone());return response}catch(e){return cached||Response.error()}})());
+ event.respondWith((async()=>{const cache=await caches.open(CACHE);const cached=await cache.match(event.request);if(url.href===ZIPLIB&&cached)return cached;try{const response=await fetch(event.request);if(response.ok||response.type==='opaque')cache.put(event.request,response.clone());return response}catch(e){return cached||Response.error()}})());
 });
