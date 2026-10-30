@@ -6,8 +6,8 @@ const path=require('node:path');
 const vm=require('node:vm');
 const dataset=require('../atlas_iades_1280_transcritas.json');
 const read=f=>fs.readFileSync(path.join(__dirname,'..',f),'utf8');
-function launch(){
- const nodes={},listeners={},stored={},cls={add(){},remove(){},toggle(){}};
+function launch(seed){
+ const nodes={},listeners={},stored=seed||{},cls={add(){},remove(){},toggle(){}};
  const doc={
   documentElement:{dataset:{}},body:{classList:cls},
   getElementById(id){if(!nodes[id])nodes[id]={id,textContent:'',innerHTML:'',value:'',classList:cls,style:{},clientWidth:680,appendChild(){},getContext(){return{drawImage(){},strokeRect(){}}}};return nodes[id]},
@@ -18,14 +18,14 @@ function launch(){
  const storage={getItem(k){return stored[k]||null},setItem(k,v){stored[k]=v}};
  const sandbox={window:wnd,document:doc,localStorage:storage,console,setTimeout(){return 1},clearTimeout(){},setInterval(){return 1},clearInterval(){},confirm(){return true},Date,URL,Blob,Map,Set,Image:class{},navigator:{}};
  vm.createContext(sandbox);
- for(const file of ['corrections.js','correction-core.js','app.js'])vm.runInContext(read(file),sandbox,{filename:file});
+ for(const file of ['corrections.js','correction-core.js','history-core.js','app.js'])vm.runInContext(read(file),sandbox,{filename:file});
  const action=(action,other={})=>{assert.ok(listeners.click);listeners.click({target:{closest(){return{dataset:{action,...other}}}}})};
- return{nodes,stored,action,html:()=>nodes.content.innerHTML,view:()=>nodes['current-page'].textContent};
+ return{nodes,stored,action,change:(id,value)=>{nodes[id]=Object.assign(nodes[id]||{},{value});listeners.change({target:{id,value}})},input:(id,value)=>{nodes[id]=Object.assign(nodes[id]||{},{value});listeners.input({target:{id,value}})},html:()=>nodes.content.innerHTML,view:()=>nodes['current-page'].textContent};
 }
 test('todas as telas abrem com o acervo carregado, sem bloqueio',()=>{
  const a=launch();
  assert.match(a.nodes.loaded.textContent,/1.280 questões/);
- for(const page of ['home','bank','exams','sim','review','weak','fav','stats','keys','imports','settings']){
+ for(const page of ['home','bank','exams','sim','review','weak','fav','stats','history','keys','imports','settings']){
   a.action('go',{page});
   assert.ok(a.html().length>80,page);
   assert.ok(a.view()!=='Carregando o acervo',page);
@@ -83,4 +83,95 @@ test('histórico permite reabrir o comentário sem produzir outra tentativa',()=
  assert.match(a.html(),/Fundamentação/);
  const history=JSON.parse(a.stored.atlas_sesdf_study_v2).attempts['df2026-001'];
  assert.equal(history.length,1);
+});
+
+test('histórico mostra resposta anterior, gabarito e comentários sem registrar nova tentativa',()=>{
+ const a=launch();
+ a.action('openq',{id:'df2026-001'});
+ a.action('draft',{value:'A'});
+ a.action('submit');
+ const before=JSON.parse(a.stored.atlas_sesdf_study_v2);
+ assert.equal(before.attempts['df2026-001'].length,1);
+ const savedSession=JSON.stringify(before.session);
+ a.action('go',{page:'history'});
+ assert.match(a.html(),/Histórico de questões respondidas/);
+ assert.match(a.html(),/Questão 1/);
+ assert.match(a.html(),/Errou/);
+ a.action('histopen',{id:'df2026-001',attempt:'0'});
+ assert.equal(a.view(),'Revisar questão');
+ assert.match(a.html(),/Questão e alternativas originais/);
+ assert.match(a.html(),/Sua resposta/);
+ assert.match(a.html(),/GABARITO OFICIAL DEFINITIVO/);
+ assert.match(a.html(),/Fundamentação/);
+ const after=JSON.parse(a.stored.atlas_sesdf_study_v2);
+ assert.equal(after.attempts['df2026-001'].length,1);
+ assert.equal(JSON.stringify(after.session),savedSession);
+});
+test('histórico permite consultar cada tentativa repetida separadamente',()=>{
+ const a=launch();
+ a.action('openq',{id:'df2026-001'});
+ a.action('draft',{value:'A'});
+ a.action('submit');
+ a.action('go',{page:'bank'});
+ a.action('openq',{id:'df2026-001'});
+ a.action('draft',{value:'D'});
+ a.action('submit');
+ a.action('go',{page:'history'});
+ assert.match(a.html(),/2 de 2/);
+ assert.doesNotMatch(a.html(),/tentativa 1 de 2/);
+ a.change('histview','all');
+ assert.match(a.html(),/tentativa 1 de 2/);
+ assert.match(a.html(),/tentativa 2 de 2/);
+ a.action('histopen',{id:'df2026-001',attempt:'0'});
+ assert.match(a.html(),/ERROU/);
+ a.action('histattempt',{attempt:'1'});
+ assert.match(a.html(),/ACERTOU/);
+ assert.match(a.html(),/tentativa 2 de 2/);
+ assert.equal(JSON.parse(a.stored.atlas_sesdf_study_v2).attempts['df2026-001'].length,2);
+});
+test('filtros do histórico por prova, resultado e período funcionam',()=>{
+ const a=launch();
+ a.action('openq',{id:'df2026-001'});a.action('draft',{value:'A'});a.action('submit');
+ a.action('go',{page:'bank'});
+ a.action('openq',{id:'df2018-001'});a.action('draft',{value:'C'});a.action('submit');
+ a.action('go',{page:'history'});
+ assert.match(a.html(),/Questão 1/);
+ a.change('histresult','errou');
+ assert.match(a.html(),/1 registro\(s\)/);
+ a.change('histexam','df2018');
+ assert.match(a.html(),/Nenhuma tentativa corresponde aos filtros/);
+ a.change('histresult','sem_gabarito');
+ assert.match(a.html(),/1 registro\(s\)/);
+ a.change('histfrom','2099-01-01');
+ assert.match(a.html(),/Nenhuma tentativa corresponde aos filtros/);
+ a.action('histclear');
+ assert.match(a.html(),/2 registro\(s\)/);
+});
+test('consulta ao histórico durante simulado não revela gabarito nem interrompe a sessão',()=>{
+ const a=launch();
+ a.action('startexam',{exam:'df2026'});
+ a.action('draft',{value:'A'});a.action('submit');
+ a.action('go',{page:'history'});
+ assert.match(a.html(),/Simulado em andamento/);
+ assert.match(a.html(),/Gabarito: Oculto/);
+ a.action('histopen',{id:'df2026-001',attempt:'0'});
+ assert.doesNotMatch(a.html(),/GABARITO OFICIAL DEFINITIVO/);
+ assert.match(a.html(),/Simulado em andamento/);
+ a.action('go',{page:'home'});a.action('resume');
+ assert.equal(a.view(),'Resolver');
+ assert.match(a.html(),/revelados ao finalizar o simulado/);
+ for(let i=0;i<80;i++)a.action('next');
+ a.action('go',{page:'history'});
+ assert.match(a.html(),/Errou/);
+ a.action('histopen',{id:'df2026-001',attempt:'0'});
+ assert.match(a.html(),/GABARITO OFICIAL DEFINITIVO/);
+});
+test('o histórico permanece disponível após recarregar o aplicativo com o mesmo armazenamento',()=>{
+ const seed={};const a=launch(seed);
+ a.action('openq',{id:'df2026-001'});a.action('draft',{value:'D'});a.action('submit');
+ const b=launch(seed);b.action('go',{page:'history'});
+ assert.match(b.html(),/Questão 1/);
+ assert.match(b.html(),/Acertou/);
+ b.action('histopen',{id:'df2026-001',attempt:'0'});
+ assert.match(b.html(),/ACERTOU/);
 });
