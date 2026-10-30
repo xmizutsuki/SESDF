@@ -103,8 +103,9 @@ function correctionPanel(q,selected){
  if(!r.key)output+='<div class="notice warning">Gabarito ainda não localizado para esta questão. Sua tentativa foi registrada, mas não será contada como acerto ou erro.</div>';
  if(r.isAnnulled)output+='<div class="notice warning">Questão anulada. Nenhuma alternativa é considerada correta para a pontuação de acertos neste aplicativo.</div>';
  if(has){
+  if(/\b(incorreta|exceto|exceção|não corresponde|não constitui)\b/i.test(q.stem_original||''))output+='<div class="notice warning">Comando negativo: a classificação CORRETA/INCORRETA se refere à alternativa que deve ser marcada na prova, não necessariamente à veracidade isolada da afirmação.</div>';
   output+='<div class="commentary"><h3>Fundamentação</h3><p>'+html(r.comment.summary)+'</p></div><h3 style="margin-top:15px">Análise individual das alternativas</h3>';
-  (q.options||[]).forEach(function(op){var status=AtlasCorrectionCore.optionStatus(r,op),heading=r.isAnnulled?'ANULADA':status==='oficial'?'RESPOSTA OFICIAL':status==='informada'?'RESPOSTA INFORMADA':'NÃO É A RESPOSTA OFICIAL';
+  (q.options||[]).forEach(function(op){var status=AtlasCorrectionCore.optionStatus(r,op),heading=r.isAnnulled?'ANULADA':status==='oficial'?'CORRETA (resposta da prova)':status==='informada'?'RESPOSTA INFORMADA — NÃO VERIFICADA':status==='nao_assinalar'?'INCORRETA (para este comando)':'NÃO INDICADA NO GABARITO INFORMADO';
    output+='<details class="alt-explanation" '+(op===selected||op===r.key?'open':'')+'><summary><b>Alternativa '+html(op)+'</b><span class="tag">'+html(heading)+'</span></summary><div class="alt-content"><div class="original-alt">'+html(q.alternatives_original&&q.alternatives_original[op]||'Texto original não disponível na transcrição.')+'</div><p>'+html(r.comment.alternatives&&r.comment.alternatives[op]||'Análise individual pendente de revisão.')+'</p></div></details>';
   });
   output+='<div class="memory"><strong>Para memorizar</strong><p>'+html(r.comment.memory||'')+'</p></div>';
