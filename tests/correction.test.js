@@ -56,14 +56,14 @@ test('gabarito informado pelo usuário não substitui fonte oficial',()=>{
  const wrong={df2026:{source:'rascunho',items:{1:'A',78:'B'}}};
  assert.equal(core.resolve(q('df2026',1),curated,wrong).key,'D');
  assert.equal(core.resolve(q('df2026',78),curated,wrong).key,'C');
- const unverified={sp2022:{source:'rascunho',items:{1:'C'}}};
- const other=core.resolve(q('sp2022',1),curated,unverified);
+ const unverified={'prova-teste':{source:'rascunho',items:{1:'C'}}};
+ const other=core.resolve({id:'questao-teste',exam:'prova-teste',num:1,options:['A','B','C','D']},curated,unverified);
  assert.equal(other.status,'informado_nao_verificado');
  assert.equal(other.hasVerifiedOfficial,false);
  assert.equal(core.evaluate(other,'C'),'acertou');
 });
 test('sem gabarito deve permanecer sem classificação de acerto',()=>{
- const c=core.resolve(q('sp2022',1),curated,{});
+ const c=core.resolve({id:'questao-pendente-teste',exam:'prova-teste-sem-chave',num:1,options:['A','B','C','D']},curated,{});
  assert.equal(c.status,'sem_gabarito');
  assert.equal(core.evaluate(c,'C'),'sem_gabarito');
  assert.equal(core.optionStatus(c,'C'),'pendente');
