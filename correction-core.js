@@ -13,7 +13,7 @@
   var note=curated&&curated.comments&&curated.comments[q.id]||null;
   return{key:value,status:status,source:source,sourceMeta:meta,comment:note,confidence:confidence,
     possibleAmbiguity:!!(ind&&ind.possibleAmbiguity),independentAnswer:suggested,independentNote:ind&&ind.note||'',
-    discrepancy:!!(custom&&value&&custom!==value),hasVerifiedOfficial:source==='iades',
+    discrepancy:!!(custom&&value&&custom!==value),officialKeyPartial:!!(off&&off.status==='oficial_definitivo_parcial'),officialNotice:off&&off.notice||'',hasVerifiedOfficial:source==='iades',
     hasTechnicalProposal:source==='analise_independente',isAnnulled:value==='#',
     wasChanged:!!(off&&Array.isArray(off.changed)&&off.changed.includes(q.num))};
  }
