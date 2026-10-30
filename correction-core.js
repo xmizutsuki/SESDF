@@ -10,13 +10,13 @@
   var source='',status='sem_gabarito',value=null,meta=null,confidence=null;
   if(official){value=official;status=official==='#'?'anulada':'oficial_definitivo';source='iades';meta=off.source;}
   else if(suggested&&ind&&ind.status==='proposta_fundamentada'){value=suggested;status='proposta_fundamentada';source='analise_independente';meta=ind.references&&ind.references[0];confidence=ind.confidence||'não avaliada';}
-  else if(secondaryKey&&secondary&&['reproducao_secundaria_nao_autenticada','gabarito_preliminar_sujeito_a_recursos'].includes(secondary.status)){value=secondaryKey;status=secondary.status;source=secondary.status==='gabarito_preliminar_sujeito_a_recursos'?'gabarito_preliminar':'reproducao_secundaria';meta=secondary.source;confidence=secondary.status==='gabarito_preliminar_sujeito_a_recursos'?'sujeito a recursos':'sem validação primária';}
+  else if(secondaryKey&&secondary&&['reproducao_secundaria_nao_autenticada','gabarito_preliminar_sujeito_a_recursos','tipo_inferido_nao_verificado'].includes(secondary.status)){value=secondaryKey;status=secondary.status;source=secondary.status==='gabarito_preliminar_sujeito_a_recursos'?'gabarito_preliminar':secondary.status==='tipo_inferido_nao_verificado'?'gabarito_tipo_inferido':'reproducao_secundaria';meta=secondary.source;confidence=secondary.status==='gabarito_preliminar_sujeito_a_recursos'?'sujeito a recursos':'sem validação primária';}
   else if(custom){value=custom;status=custom==='#'?'anulada_informada':'informado_nao_verificado';source='usuario';meta=u.source||null;}
   var note=curated&&curated.comments&&curated.comments[q.id]||null;
   return{key:value,status:status,source:source,sourceMeta:meta,comment:note,confidence:confidence,
     possibleAmbiguity:!!(ind&&ind.possibleAmbiguity),independentAnswer:suggested,independentNote:ind&&ind.note||'',
     discrepancy:!!(custom&&value&&custom!==value),officialKeyPartial:!!(off&&off.status==='oficial_definitivo_parcial'),officialNotice:off&&off.notice||'',hasVerifiedOfficial:source==='iades',
-    hasTechnicalProposal:source==='analise_independente',hasSecondary:source==='reproducao_secundaria'||source==='gabarito_preliminar',isAnnulled:value==='#',
+    hasTechnicalProposal:source==='analise_independente',hasSecondary:source==='reproducao_secundaria'||source==='gabarito_preliminar'||source==='gabarito_tipo_inferido',isAnnulled:value==='#',
     wasChanged:!!(off&&Array.isArray(off.changed)&&off.changed.includes(q.num))};
  }
  function evaluate(resolved,answer){var a=normalizeChoice(answer);if(resolved.isAnnulled)return'anulada';if(String(answer)==='?')return'nao_sei';if(!a||a==='#')return'nao_respondida';if(!resolved.key)return'sem_gabarito';if(a===resolved.key)return'acertou';return'errou'}
