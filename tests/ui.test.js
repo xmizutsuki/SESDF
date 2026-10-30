@@ -50,10 +50,11 @@ test('questão anulada mostra anulação e não falsa correção',()=>{
  assert.match(a.html(),/QUESTÃO ANULADA/);
  assert.match(a.html(),/Nenhuma alternativa é considerada correta/);
 });
-test('questão sem gabarito não inventa uma alternativa correta',()=>{
- const a=launch();a.action('openq',{id:'df2024-002'});a.action('draft',{value:'C'});a.action('submit');
- assert.match(a.html(),/GABARITO NÃO LOCALIZADO/);
- assert.match(a.html(),/não será contada como acerto ou erro/);
+test('questão com chave oficial mas sem comentário não recebe justificativa inventada',()=>{
+ const a=launch();a.action('openq',{id:'sp2021-004'});a.action('draft',{value:'E'});a.action('submit');
+ assert.match(a.html(),/GABARITO OFICIAL DEFINITIVO/);
+ assert.match(a.html(),/Comentário técnico ainda não publicado/);
+ assert.doesNotMatch(a.html(),/Análise individual das alternativas/);
 });
 test('gabarito alterado da questão 78 é C, com justificativa',()=>{
  const a=launch();a.action('openq',{id:'df2026-078'});a.action('draft',{value:'B'});a.action('submit');
@@ -133,7 +134,7 @@ test('filtros do histórico por prova, resultado e período funcionam',()=>{
  const a=launch();
  a.action('openq',{id:'df2026-001'});a.action('draft',{value:'A'});a.action('submit');
  a.action('go',{page:'bank'});
- a.action('openq',{id:'sp2022-001'});a.action('draft',{value:'C'});a.action('submit');
+ a.action('openq',{id:'df2024-002'});a.action('draft',{value:'C'});a.action('submit');
  a.action('go',{page:'history'});
  assert.match(a.html(),/Questão 1/);
  a.change('histresult','errou');
