@@ -127,27 +127,42 @@ O menu **Histórico de questões** permite rever respostas de qualquer sessão a
 
 Arquivos principais: `history-core.js` (indexação e filtros), `app.js` (páginas e comandos), `styles.css` (interface), `tests/history.test.js` e `tests/ui.test.js` (testes).
 
-## Correção e comentários: estado em 30/10/2026
+## Correção e comentários: cobertura auditada em 30/10/2026
 
-O aplicativo mantém questões originais separadas da camada de correção (corrections.js e correction-core.js). No modo estudo, o resultado aparece depois de confirmar a alternativa. No simulado, só aparece depois da finalização. O histórico permite consultar o comentário novamente.
+O aplicativo mantém **três níveis de confiança**: (1) gabarito oficial definitivo da IADES; (2) resposta técnica independente **NÃO OFICIAL**, fundamentada nas fontes verificáveis por alternativa; e (3) pendente, sem resposta gerada. O gabarito informado pelo estudante também é armazenado separado, mas não substitui o definitivo da banca ou a proposta técnica documentada.
 
 | Indicador | Quantidade |
 | --- | ---: |
 | Questões cadastradas | **1.280** |
-| Gabaritos oficiais válidos confirmados | **77** |
-| Questões anuladas oficialmente | **3** (13, 71, 72 de 2026) |
-| Posições cobertas pelo gabarito definitivo IADES 2026 | **80** |
-| Resoluções comentadas por alternativa | **8** |
-| Questões sem comentário técnico completo | **1.272** |
-| Questões sem gabarito oficial confirmado | **1.200** |
+| Respostas oficiais válidas identificadas | **194** |
+| Anulações oficiais identificadas | **5** |
+| Propostas técnicas independentes, não oficiais | **13** |
+| Questões com resposta disponível (incluindo anuladas) | **212** |
+| Questões ainda sem resposta de referência | **1.068** |
+| Questões com comentário técnico individual de todas as alternativas | **23** |
+| Questões sem comentário completo | **1.257** |
 
-Os comentários completos atuais correspondem às questões **1, 13, 66, 71, 72, 73, 74 e 78** da prova de 2026. Foram fundamentados em materiais do Ministério da Saúde, PNAB, COFEN 736/2024, AHA 2025 e documentos IADES de gabarito e recursos.
+### Gabaritos oficiais identificados
 
-Fontes oficiais: [Gabarito definitivo IADES 2026](https://www.iades.com.br/inscricao/upload/1364/202601289816794.pdf) e [justificativas de recursos](https://www.iades.com.br/inscricao/upload/1364/202601289849575.pdf).
+- **SES-DF/2026, Enfermagem Tipo B:** 80 posições, sendo 77 respostas válidas e 3 anulações (13, 71, 72). A questão 78 tem gabarito definitivo C. [PDF IADES 2026](https://www.iades.com.br/inscricao/upload/1364/202601289816794.pdf).
+- **RP/SES-DF/2018, Enfermagem Grupo 001 Tipo C (prova de 03/12/2017):** 119 posições extraídas do [gabarito definitivo IADES divulgado em 20/12/2017](https://www.iades.com.br/inscricao/upload/191/20171220203859883.pdf), com 117 respostas válidas e 2 anulações (90, 113). **Item 40 permanece pendente**: a extração textual disponível não permitiu transcrever esse campo com segurança e ele não foi inventado. A conferência visual integral ainda precisa ser feita. Não confundir com o processo RP/SES-DF/2019.
 
-**Não há cobertura integral de comentários.** Questões pendentes mostram aviso claro, sem inventar resposta ou justificativa.
+### Respostas independentes fundamentadas
 
-Os testes automatizados estão em tests/ e são executados com `node --test tests/*.test.js` pela workflow .github/workflows/tests.yml. Incluem pontuação, anuladas, retificação, navegabilidade, simulado, visibilidade e histórico. A interface é testada em DOM simulado, e ainda precisa de testes manuais com navegadores reais.
+As 13 propostas não oficiais correspondem a: `df2024` questões 1, 2 e 4; `sp2023` questões 11, 12 e 13; e `df2017u` questões 1, 2, 3, 4, 6, 9 e 10. As 13 foram produzidas por resolução independente, mantendo todas as alternativas textuais originais em arquivo distinto. Fontes: OpenStax (anatomia), Lei nº 8.142/1990, Ministério da Saúde (SUS), Secretaria da Saúde de São Paulo (PNH), NCBI/StatPearls (neuroanatomia) e NCI/CDC (oncologia e AVC).
+
+Uma das propostas (`df2024-001`) foi marcada com **possível ambiguidade e confiança moderada**, não como verdade oficial. As questões sem verificação permanecem pendentes. Não houve solução automática em massa nem presunção de que toda questão sem resposta pode ser resolvida com segurança.
+
+### Arquitetura e testes
+
+- `corrections.js`: gabarito definitivo 2026 e comentários iniciais.
+- `official-2018.js`: gabarito definitivo parcial 2018, com lacuna explicitada.
+- `research-answers.js`: 13 gabaritos técnicos não oficiais + 15 comentários (incluindo 2 itens de 2018).
+- `correction-core.js`: regra determinística que prioriza oficial > independente fundamentado > cadastrado pelo usuário > pendente, com reconhecimento de anulações e divergências.
+- `app.js`: painel de correção, referências e indicadores de cobertura; modo simulado respeita ocultação até o encerramento.
+- `tests/`: testes automatizados via Node no GitHub Actions, incluindo origem da correção, anulações, retificações, propostas e dados não alterados.
+
+**Limitações:** não há 100% de gabaritos nem 100% de comentários completos. Fontes podem não ter ano de publicação explícito, nesses casos somente a data de consulta é registrada. As resoluções técnicas precisam de confronto com gabaritos oficiais quando estes forem localizados. Os PDFs e imagens originais ainda não estão hospedados no GitHub; para comparar visualmente, utilize o ZIP distribuído separadamente.
 
 ## Política de integridade
 
