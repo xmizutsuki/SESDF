@@ -14,7 +14,10 @@ require('../official-2024.js');
 require('../official-2019-nef.js');
 require('../secondary-2023.js');
 require('../preliminary-2017u.js');
+require('../official-sp2021.js');
+require('../provisional-sp2022.js');
 require('../research-answers.js');
+require('../research-additions.js');
 const curated=global.window.ATLAS_CORRECTIONS;
 const questions=require('../atlas_iades_1280_transcritas.json');
 function q(exam,num){return questions.questions.find(x=>x.exam===exam&&x.num===num)}
@@ -75,7 +78,7 @@ test('simulado oculta respostas antes do encerramento e libera depois',()=>{
 });
 test('comentários completos cadastrados possuem as quatro alternativas e links verificáveis',()=>{
  const items=Object.entries(curated.comments);
- assert.equal(items.length,23);
+ assert.equal(items.length,29);
  for(const [id,item] of items){
   const question=questions.questions.find(x=>x.id===id);
   assert.ok(question,id);
@@ -92,14 +95,14 @@ test('resoluções das questões anuladas e retificada permanecem identificadas'
 });
 test('cobertura diferencia respostas oficiais, independentes e pendentes',()=>{
  const cov=core.coverage(questions.questions,curated);
- assert.deepEqual(cov,{total:1280,officialValid:1010,officialAnnulled:9,commented:23,missingOfficial:261,commentPending:1257,independent:10,secondary:130,unresolved:121,withAnswer:1159});
+ assert.deepEqual(cov,{total:1280,officialValid:1070,officialAnnulled:9,commented:29,missingOfficial:201,commentPending:1251,independent:16,secondary:185,unresolved:0,withAnswer:1280});
 });
 test('correção de itens CERTO/ERRADO aceita C e E',()=>{
  const c={key:'E',status:'informado_nao_verificado',isAnnulled:false,hasVerifiedOfficial:false};
  assert.equal(core.evaluate(c,'C'),'errou');assert.equal(core.evaluate(c,'E'),'acertou');
 });
 
-test('gabarito definitivo IADES 2018 inclui apenas 119 posições e mantém item 40 pendente',()=>{
+test('gabarito definitivo IADES 2018 tem 119 posições e item 40 tem resolução independente',()=>{
  const k=curated.officialKeys.df2018.answers;
  assert.equal(Object.keys(k).length,119);
  assert.equal(k[3],'E');
@@ -107,7 +110,7 @@ test('gabarito definitivo IADES 2018 inclui apenas 119 posições e mantém item
  assert.equal(k[90],'#');
  assert.equal(k[113],'#');
  assert.equal(k[40],undefined);
- assert.equal(core.resolve(q('df2018',40),curated,{}).status,'sem_gabarito');
+ assert.equal(core.resolve(q('df2018',40),curated,{}).status,'proposta_fundamentada');
  assert.equal(core.resolve(q('df2018',16),curated,{}).hasVerifiedOfficial,true);
 });
 test('resolução independente não é rotulada como oficial',()=>{
@@ -128,9 +131,9 @@ test('resposta técnica fundamentada prevalece sobre cadastro pessoal, sem virar
  assert.equal(r.discrepancy,true);
  assert.equal(r.hasVerifiedOfficial,false);
 });
-test('13 questões inéditas têm comentários em todas as alternativas, textos e URLs',()=>{
+test('19 questões independentes têm comentários por alternativa, textos e URLs',()=>{
  const entries=Object.entries(curated.independentAnswers);
- assert.equal(entries.length,13);
+ assert.equal(entries.length,19);
  for(const [id,item] of entries){
   const question=questions.questions.find(x=>x.id===id);
   const comment=curated.comments[id];
@@ -186,6 +189,41 @@ test('transcrição SP 2023 não é autenticação primária do gabarito definit
  assert.equal(r.hasSecondary,true);
  assert.equal(r.status,'reproducao_secundaria_nao_autenticada');
 });
-test('item sem chave 2022 SP permanece pendente',()=>{
- assert.equal(core.resolve(q('sp2022',1),curated,{}).status,'sem_gabarito');
+test('caderno SP 2022 usa chave Tipo B somente como correspondência inferida',()=>{
+ const r=core.resolve(q('sp2022',4),curated,{});
+ assert.equal(r.key,'E');
+ assert.equal(r.hasVerifiedOfficial,false);
+ assert.equal(r.hasSecondary,true);
+ assert.equal(r.status,'tipo_inferido_nao_verificado');
+});
+
+test('gabarito oficial IADES Saúde da Família SP 2021 Tipo B cobre 60 questões',()=>{
+ const x=curated.officialKeys.sp2021;
+ assert.equal(Object.keys(x.answers).length,60);
+ assert.equal(x.answers[1],'A');
+ assert.equal(x.answers[2],'D');
+ assert.equal(x.answers[3],'B');
+ assert.equal(core.resolve(q('sp2021',3),curated,{}).hasVerifiedOfficial,true);
+});
+test('enunciado 2018-040 nifedipina é tecnicamente E, não foi inventado como oficial',()=>{
+ const r=core.resolve(q('df2018',40),curated,{});
+ assert.equal(r.key,'E');
+ assert.equal(r.status,'proposta_fundamentada');
+ assert.equal(r.hasVerifiedOfficial,false);
+ assert.ok(r.comment.alternatives.C.includes('canais de cálcio'));
+});
+test('SP2022: cinco soluções técnicas com fontes prevalecem sobre associação inferida',()=>{
+ for(const [n,key] of [[1,'E'],[2,'C'],[3,'A'],[5,'D'],[6,'B']]){
+  const r=core.resolve(q('sp2022',n),curated,{});
+  assert.equal(r.key,key);
+  assert.equal(r.hasTechnicalProposal,true);
+  assert.equal(r.hasVerifiedOfficial,false);
+ }
+});
+test('todas as 1280 questões possuem resposta atribuída, mas só 29 comentários individuais',()=>{
+ const out=core.coverage(questions.questions,curated);
+ assert.equal(out.withAnswer,1280);
+ assert.equal(out.unresolved,0);
+ assert.equal(out.commented,29);
+ assert.ok(out.secondary>0);
 });
