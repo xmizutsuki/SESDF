@@ -127,42 +127,54 @@ O menu **Histórico de questões** permite rever respostas de qualquer sessão a
 
 Arquivos principais: `history-core.js` (indexação e filtros), `app.js` (páginas e comandos), `styles.css` (interface), `tests/history.test.js` e `tests/ui.test.js` (testes).
 
-## Correção e comentários: cobertura auditada em 30/10/2026
+## Correção e comentários: cobertura em 30/10/2026
 
-O aplicativo mantém **três níveis de confiança**: (1) gabarito oficial definitivo da IADES; (2) resposta técnica independente **NÃO OFICIAL**, fundamentada nas fontes verificáveis por alternativa; e (3) pendente, sem resposta gerada. O gabarito informado pelo estudante também é armazenado separado, mas não substitui o definitivo da banca ou a proposta técnica documentada.
+**Todas as 1.280 questões possuem uma letra/resposta de referência atribuída**, mas isso **NÃO** significa que todas foram resolvidas independentemente nem que exista justificativa científico-técnica individual para todas. Apenas **29** questões têm comentário completo de cada alternativa com fontes. O aplicativo diferencia explicitamente os níveis de procedência das respostas.
 
-| Indicador | Quantidade |
+| Situação da resposta (prioridade) | Questões |
 | --- | ---: |
-| Questões cadastradas | **1.280** |
-| Respostas oficiais válidas identificadas | **194** |
-| Anulações oficiais identificadas | **5** |
-| Propostas técnicas independentes, não oficiais | **13** |
-| Questões com resposta disponível (incluindo anuladas) | **212** |
-| Questões ainda sem resposta de referência | **1.068** |
-| Questões com comentário técnico individual de todas as alternativas | **23** |
-| Questões sem comentário completo | **1.257** |
+| Gabarito definitivo IADES — respostas válidas | **1.070** |
+| Anuladas no gabarito definitivo da banca | **9** |
+| Respostas técnicas independentes, não oficiais, com comentários | **16** |
+| Chaves documentais provisórias/preliminares, cópias ou tipo inferido | **185** |
+| Sem qualquer letra/resposta atribuída | **0** |
+| **TOTAL de questões com resposta de referência** | **1.280** |
 
-### Gabaritos oficiais identificados
+**Comentários:** 29 de 1.280 possuem fundamentação alternativa por alternativa; as outras **1.251** ainda precisam de análises científicas individuais. **O gabarito da banca não equivale a justificativa científica.** Sem comentário, o aplicativo mostra a resposta de referência e identifica as explicações como pendentes, em vez de inventá-las.
 
-- **SES-DF/2026, Enfermagem Tipo B:** 80 posições, sendo 77 respostas válidas e 3 anulações (13, 71, 72). A questão 78 tem gabarito definitivo C. [PDF IADES 2026](https://www.iades.com.br/inscricao/upload/1364/202601289816794.pdf).
-- **RP/SES-DF/2018, Enfermagem Grupo 001 Tipo C (prova de 03/12/2017):** 119 posições extraídas do [gabarito definitivo IADES divulgado em 20/12/2017](https://www.iades.com.br/inscricao/upload/191/20171220203859883.pdf), com 117 respostas válidas e 2 anulações (90, 113). **Item 40 permanece pendente**: a extração textual disponível não permitiu transcrever esse campo com segurança e ele não foi inventado. A conferência visual integral ainda precisa ser feita. Não confundir com o processo RP/SES-DF/2019.
+### Referências oficiais definitivas
 
-### Respostas independentes fundamentadas
+- SES-DF 2026, Enfermagem Tipo B, **80** posições (77 válidas, 3 anuladas): [IADES](https://www.iades.com.br/inscricao/upload/1364/202601289816794.pdf).
+- SES-DF 2018, Enfermagem Grupo 001 Tipo C, **119** posições (117 válidas, 2 anuladas); a questão 40 não foi recuperada da chave e recebeu **proposta técnica não oficial**: [IADES](https://www.iades.com.br/inscricao/upload/191/20171220203859883.pdf).
+- SES-DF RP/2017, Enfermagem Tipo D, **120** posições (118 válidas, 2 anuladas): [IADES](https://www.iades.com.br/inscricao/upload/170/20161219155213842.pdf).
+- SES-DF RP/2019, Enfermagem Terapia Intensiva Tipo B, **120**: [IADES](https://www.iades.com.br/inscricao/upload/225/20181112223840245.pdf).
+- SES-DF RP-2/2019, Enfermagem Nefrologia Tipo B, **120**: [IADES](https://www.iades.com.br/inscricao/upload/243/2019032219539556.pdf).
+- SES-DF RP/2020, Enfermagem Adulto e Idoso Tipo C, **120**: [IADES](https://www.iades.com.br/inscricao/upload/261/20200106222416807.pdf).
+- SES-DF RP/2021, Enfermagem Terapia Intensiva Tipo C, **120** posições (119 válidas, 1 anulada): [IADES](https://www.iades.com.br/inscricao/upload/276/20210108223857918.pdf).
+- SES-DF RP/2022, Enfermagem Adulto e Idoso Tipo U, **120** posições (119 válidas, 1 anulada): [IADES](https://www.iades.com.br/inscricao/upload/299/20211223154552184.pdf).
+- SES-DF RP/2024, Enfermagem Atenção Cardíaca Tipo U, **100**: [IADES](https://www.iades.com.br/inscricao/upload/1336/2024010972015831.pdf).
+- SMS-SP 2021, Enfermagem Saúde da Família Tipo B, **60**: [IADES](https://www.iades.com.br/inscricao/upload/284/20210203135241563.pdf).
 
-As 13 propostas não oficiais correspondem a: `df2024` questões 1, 2 e 4; `sp2023` questões 11, 12 e 13; e `df2017u` questões 1, 2, 3, 4, 6, 9 e 10. As 13 foram produzidas por resolução independente, mantendo todas as alternativas textuais originais em arquivo distinto. Fontes: OpenStax (anatomia), Lei nº 8.142/1990, Ministério da Saúde (SUS), Secretaria da Saúde de São Paulo (PNH), NCBI/StatPearls (neuroanatomia) e NCI/CDC (oncologia e AVC).
+### Chaves documentais de correspondência não confirmada
 
-Uma das propostas (`df2024-001`) foi marcada com **possível ambiguidade e confiança moderada**, não como verdade oficial. As questões sem verificação permanecem pendentes. Não houve solução automática em massa nem presunção de que toda questão sem resposta pode ser resolvida com segurança.
+- SES-DF 2017 Enfermagem Tipo U: gabarito **preliminar** de 19/03/2017 com 80 posições; após sete resoluções técnicas independentes para esse caderno, 73 itens dependem da referência preliminar. Um definitivo posterior foi anunciado, mas não comparado: [IADES](https://www.iades.com.br/inscricao/upload/179/20170319182231149.pdf).
+- SMS-SP 2023 Enfermagem Tipo A: cópia de terceiros de um gabarito divulgado, sem PDF primário recuperado; três posições têm resolução técnica própria e 57 dependem da reprodução documental. O status nunca é tratado como oficialmente autenticado.
+- SMS-SP 2022 Enfermagem: o **tipo do caderno importado não está identificado**. A chave definitiva IADES [Tipo B](https://www.iades.com.br/inscricao/upload/298/2021122995739182.pdf) coincide com as respostas de cinco itens conferidos pelo enunciado (1, 2, 3, 5, 6). Esses cinco têm resolução técnica própria e **55** usam provisoriamente a tabela Tipo B. A correspondência do caderno inteiro permanece **inferida**, nunca oficial autenticada.
 
-### Arquitetura e testes
+### Resoluções independentes e limitações
 
-- `corrections.js`: gabarito definitivo 2026 e comentários iniciais.
-- `official-2018.js`: gabarito definitivo parcial 2018, com lacuna explicitada.
-- `research-answers.js`: 13 gabaritos técnicos não oficiais + 15 comentários (incluindo 2 itens de 2018).
-- `correction-core.js`: regra determinística que prioriza oficial > independente fundamentado > cadastrado pelo usuário > pendente, com reconhecimento de anulações e divergências.
-- `app.js`: painel de correção, referências e indicadores de cobertura; modo simulado respeita ocultação até o encerramento.
-- `tests/`: testes automatizados via Node no GitHub Actions, incluindo origem da correção, anulações, retificações, propostas e dados não alterados.
+As resoluções próprias estão em `research-answers.js` e `research-additions.js`. Elas possuem resposta proposta, grau de confiança, comentários de cada opção, referências e aviso **NÃO OFICIAL**. O item 40 de 2018, por exemplo, é ERRADO porque nifedipina é bloqueador de canais de cálcio e não fármaco hipotensor central/bloqueador adrenérgico. Fontes incluem a [Diretriz Brasileira de Hipertensão Arterial 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC13671149/), [Ministério da Saúde](https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-com-deficiencia), [Lei 13.146/2015](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm), OpenStax, NCI, AHA e COFEN conforme cada comentário.
 
-**Limitações:** não há 100% de gabaritos nem 100% de comentários completos. Fontes podem não ter ano de publicação explícito, nesses casos somente a data de consulta é registrada. As resoluções técnicas precisam de confronto com gabaritos oficiais quando estes forem localizados. Os PDFs e imagens originais ainda não estão hospedados no GitHub; para comparar visualmente, utilize o ZIP distribuído separadamente.
+**A conferência visual de todas as 1.280 transcrições e gabaritos com os PDFs originais ainda não foi concluída.** Não assumir que a letra atribuída seja infalível, especialmente nas duas chaves provisórias de São Paulo e no preliminar de 2017. PDF original e gabarito definitivo da banca prevalecem diante de qualquer divergência.
+
+### Arquivos e testes
+
+- `corrections.js`: SES-DF/2026 e primeiras resoluções.
+- `official-2018.js`, `official-2017d.js`, `official-2019-2020.js`, `official-2019-nef.js`, `official-2021.js`, `official-2022.js`, `official-2024.js` e `official-sp2021.js`: chaves definitivas de suas provas respectivas.
+- `preliminary-2017u.js`, `secondary-2023.js`, `provisional-sp2022.js`: chaves não definitivas/não autenticadas, sempre destacadas com advertência.
+- `research-answers.js`, `research-additions.js`: resoluções independentes com fundamentação por alternativa.
+- `correction-core.js`: prioridade oficial definitivo > proposta técnica própria fundamentada > fonte documental provisória > gabarito cadastrado > sem resposta.
+- `.github/workflows/tests.yml` e `tests/`: testes de sintaxe, correspondência, anulações, status de fonte e UI, sem modificar enunciados.
 
 ## Política de integridade
 
