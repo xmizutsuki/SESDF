@@ -7,7 +7,7 @@ const dataset=require('../atlas_iades_1280_transcritas.json');
 global.window={};require('../corrections.js');
 const curated=window.ATLAS_CORRECTIONS;
 const q=dataset.questions.find(x=>x.id==='df2026-001');
-const other=dataset.questions.find(x=>x.id==='df2018-001');
+const other=dataset.questions.find(x=>x.id==='df2017u-011');
 const exam=x=>dataset.exams.find(e=>e.id===x.exam);
 const resolve=x=>cc.resolve(x,curated,{});
 const evaluate=(r,a)=>cc.evaluate(r,a);
@@ -40,7 +40,7 @@ test('filtro por gabarito, prova, data, ano e texto',()=>{
  assert.equal(core.filtered(rows,{view:'all',result:'errou'},exam,x=>x.topic).length,1);
  assert.equal(core.filtered(rows,{view:'all',result:'acertou'},exam,x=>x.topic).length,1);
  assert.equal(core.filtered(rows,{view:'all',result:'sem_gabarito'},exam,x=>x.topic).length,1);
- assert.equal(core.filtered(rows,{view:'all',exam:'df2018'},exam,x=>x.topic).length,1);
+ assert.equal(core.filtered(rows,{view:'all',exam:'df2017u'},exam,x=>x.topic).length,1);
  assert.equal(core.filtered(rows,{view:'all',year:'2026'},exam,x=>x.topic).length,2);
  assert.equal(core.filtered(rows,{view:'all',from:'2026-10-21',to:'2026-10-24'},exam,x=>x.topic).length,1);
  assert.equal(core.filtered(rows,{view:'all',search:'dengue'},exam,x=>x.topic).length,2);
