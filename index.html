@@ -23,6 +23,7 @@
    <button data-page="weak" data-action="go"><span>◎</span> Minhas fragilidades</button>
    <button data-page="fav" data-action="go"><span>♡</span> Meus cadernos</button>
    <div class="section-label">ACOMPANHAR</div>
+   <button data-page="history" data-action="go"><span>↶</span> Histórico de questões</button>
    <button data-page="stats" data-action="go"><span>▥</span> Estatísticas</button>
    <button data-page="keys" data-action="go"><span>✓</span> Gabaritos</button>
    <button data-page="imports" data-action="go"><span>⇧</span> Importar PDFs</button>
@@ -44,6 +45,7 @@
 <script src="./data.js" defer></script>
 <script src="./corrections.js" defer></script>
 <script src="./correction-core.js" defer></script>
+<script src="./history-core.js" defer></script>
 <script src="./app.js" defer></script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){reg.update().catch(function(){})}).catch(function(){})})}</script>
 </body>
