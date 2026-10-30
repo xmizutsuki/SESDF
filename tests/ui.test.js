@@ -18,7 +18,7 @@ function launch(seed){
  const storage={getItem(k){return stored[k]||null},setItem(k,v){stored[k]=v}};
  const sandbox={window:wnd,document:doc,localStorage:storage,console,setTimeout(){return 1},clearTimeout(){},setInterval(){return 1},clearInterval(){},confirm(){return true},Date,URL,Blob,Map,Set,Image:class{},navigator:{}};
  vm.createContext(sandbox);
- for(const file of ['corrections.js','official-2018.js','research-answers.js','correction-core.js','history-core.js','app.js'])vm.runInContext(read(file),sandbox,{filename:file});
+ for(const file of ['corrections.js','official-2018.js','official-2019-2020.js','official-2021.js','official-2017d.js','official-2022.js','official-2024.js','official-2019-nef.js','secondary-2023.js','preliminary-2017u.js','research-answers.js','correction-core.js','history-core.js','app.js'])vm.runInContext(read(file),sandbox,{filename:file});
  const action=(action,other={})=>{assert.ok(listeners.click);listeners.click({target:{closest(){return{dataset:{action,...other}}}}})};
  return{nodes,stored,action,change:(id,value)=>{nodes[id]=Object.assign(nodes[id]||{},{value});listeners.change({target:{id,value}})},input:(id,value)=>{nodes[id]=Object.assign(nodes[id]||{},{value});listeners.input({target:{id,value}})},html:()=>nodes.content.innerHTML,view:()=>nodes['current-page'].textContent};
 }
@@ -51,7 +51,7 @@ test('questão anulada mostra anulação e não falsa correção',()=>{
  assert.match(a.html(),/Nenhuma alternativa é considerada correta/);
 });
 test('questão sem gabarito não inventa uma alternativa correta',()=>{
- const a=launch();a.action('openq',{id:'df2017u-011'});a.action('draft',{value:'C'});a.action('submit');
+ const a=launch();a.action('openq',{id:'sp2022-001'});a.action('draft',{value:'C'});a.action('submit');
  assert.match(a.html(),/GABARITO NÃO LOCALIZADO/);
  assert.match(a.html(),/não será contada como acerto ou erro/);
 });
@@ -133,12 +133,12 @@ test('filtros do histórico por prova, resultado e período funcionam',()=>{
  const a=launch();
  a.action('openq',{id:'df2026-001'});a.action('draft',{value:'A'});a.action('submit');
  a.action('go',{page:'bank'});
- a.action('openq',{id:'df2017u-011'});a.action('draft',{value:'C'});a.action('submit');
+ a.action('openq',{id:'sp2022-001'});a.action('draft',{value:'C'});a.action('submit');
  a.action('go',{page:'history'});
  assert.match(a.html(),/Questão 1/);
  a.change('histresult','errou');
  assert.match(a.html(),/1 registro\(s\)/);
- a.change('histexam','df2017u');
+ a.change('histexam','sp2022');
  assert.match(a.html(),/Nenhuma tentativa corresponde aos filtros/);
  a.change('histresult','sem_gabarito');
  assert.match(a.html(),/1 registro\(s\)/);
@@ -188,7 +188,7 @@ test('resolução técnica não oficial aparece após responder e explica todas 
 });
 test('resolução ainda inexistente não inventa gabarito nem bloqueia avanço',()=>{
  const a=launch();
- a.action('openq',{id:'df2017u-011'});
+ a.action('openq',{id:'sp2022-001'});
  a.action('draft',{value:'C'});a.action('submit');
  assert.match(a.html(),/GABARITO NÃO LOCALIZADO/);
  assert.match(a.html(),/não será contada como acerto ou erro/);
@@ -204,4 +204,22 @@ test('página de gabaritos lista separadamente chave oficial e propostas técnic
  a.change('keyexam','df2018');
  assert.match(a.html(),/119 posições identificadas/);
  assert.match(a.html(),/gabarito oficial/);
+});
+
+test('gabarito final de 2024 aparece com link oficial sem se confundir com análise própria',()=>{
+ const a=launch();
+ a.action('openq',{id:'df2024-001'});
+ a.action('draft',{value:'D'});a.action('submit');
+ assert.match(a.html(),/GABARITO OFICIAL DEFINITIVO/);
+ assert.match(a.html(),/ACERTOU/);
+ assert.doesNotMatch(a.html(),/RESOLUÇÃO TÉCNICA — NÃO OFICIAL/);
+});
+test('gabaritos preliminares e cópias secundárias apresentam aviso de não definitividade',()=>{
+ const a=launch();a.action('openq',{id:'df2017u-011'});a.action('draft',{value:'C'});a.action('submit');
+ assert.match(a.html(),/GABARITO PRELIMINAR — SUJEITO A RECURSOS/);
+ assert.match(a.html(),/documental provisória/);
+ a.action('go',{page:'bank'});
+ a.action('openq',{id:'sp2023-001'});a.action('draft',{value:'E'});a.action('submit');
+ assert.match(a.html(),/CÓPIA DE GABARITO — NÃO AUTENTICADA/);
+ assert.match(a.html(),/reprodução de terceiros/);
 });
