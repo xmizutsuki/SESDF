@@ -36,3 +36,19 @@
 .review-row{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);padding:11px 12px}
 .review-row>div{flex:1;min-width:0}.review-row .btn{flex-shrink:0}
 @media(max-width:600px){.correction-panel{padding:11px}.correction-head{align-items:flex-start}.alt-explanation summary{align-items:flex-start}.review-row{flex-wrap:wrap}.review-row .btn{width:100%}}
+
+/* Histórico: consulta independente do simulado e das estatísticas */
+.history-filter-grid{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:12px}
+.history-filter-grid .history-wide{grid-column:span 2}
+.history-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 20px;background:var(--surface);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)}
+.history-row-main{flex:1;min-width:0}.history-row-main>strong{display:block;margin:5px 0 2px;font-size:14px}
+.history-row-main>small{display:block;color:var(--muted);font-size:11px}
+.history-row-main>p{font-size:12px;color:var(--ink);margin:10px 0;line-height:1.6;overflow-wrap:anywhere}
+.history-row>.btn{flex-shrink:0}
+.history-stem{padding:15px;margin:14px 0;border-radius:10px;background:var(--surface2);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+.history-option{display:flex;gap:10px;align-items:flex-start;padding:13px 14px;border:1px solid var(--line);border-radius:9px;margin:8px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.history-option>b{color:var(--brand);flex-shrink:0}.history-option>div{flex:1}
+.history-option-chosen{background:var(--surface2);border-color:var(--brand)}
+.history-attempt-tabs{display:flex;gap:8px;flex-wrap:wrap}.history-attempt-tabs .btn{font-weight:600}
+@media(max-width:1120px){.history-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.history-filter-grid .history-wide{grid-column:span 2}}
+@media(max-width:650px){.history-row{flex-direction:column;align-items:stretch;gap:11px;padding:14px}.history-row>.btn{width:100%}.history-filter-grid{grid-template-columns:1fr}.history-filter-grid .history-wide{grid-column:auto}.history-option{flex-wrap:wrap}}
