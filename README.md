@@ -2,7 +2,7 @@
 
 Aplicativo web responsivo para **Residência em Enfermagem**, reconstruído no repositório [xmizutsuki/SESDF](https://github.com/xmizutsuki/SESDF).
 
-**Atenção:** o código completo do aplicativo está no GitHub, mas o pacote com os PDFs e as imagens originais **não foi incluído no repositório**. Para carregar as 1.280 questões, utilize o novo arquivo `Atlas_IADES_IADES_1280_Transcricao_Integral.zip` ou, para o modo texto sem imagens, `atlas_iades_1280_transcritas.json`, entregues na conversa. O pacote pode ser importado diretamente pelo navegador, sem Python nem servidor local.
+**As 1.280 questões em texto carregam automaticamente** a partir do arquivo JSON publicado no GitHub. Os PDFs e as imagens originais ainda não foram hospedados; para visualizar as páginas integrais no app, importe o pacote ZIP distribuído na conversa. A conferência humana de todas as transcrições ainda está pendente.
 
 ## Funcionalidades implementadas
 
@@ -86,7 +86,7 @@ O processamento de ZIP utiliza **JSZip 3.10.1** via CDN (carregamento inicial ex
 
 ## Gabaritos
 
-O banco original não inclui gabaritos oficiais conferidos para todas as provas. Por isso, **nenhuma resposta será inventada**. A correção só é ativada quando você cadastra um gabarito, que será identificado como fonte declarada pelo usuário. Questões anuladas devem ser marcadas com `#`; elas ficam fora do cálculo de acertos.
+O banco original não inclui gabaritos oficiais conferidos para todas as provas. Por isso, **nenhuma resposta será inventada**. O gabarito definitivo de Enfermagem Tipo B, SES-DF 2026 já é carregado automaticamente a partir da fonte oficial IADES (77 respostas válidas, questões 13/71/72 anuladas e questão 78 retificada para C). Os demais gabaritos permanecem não verificados até confirmação documental. Questões anuladas devem ser marcadas com `#`; elas ficam fora do cálculo de acertos.
 
 Formatação aceita (uma por linha):
 
@@ -104,11 +104,34 @@ Nas provas CERTO/ERRADO, utilize `C` para CERTO e `E` para ERRADO.
 - [x] Importação do pacote de 1.280 questões e das transcrições por JSON, com renderização textual dos enunciados e alternativas.
 - [x] Registro de tentativas, confiança, revisão, fragilidades e estatísticas.
 - [x] Workflow de implantação por Pages adicionada.
-- [ ] Publicação direta no repositório dos PDFs, imagens originais e dados textuais (arquivos entregues separadamente).
+- [x] Publicação direta das 1.280 questões transcritas em JSON no GitHub.
+- [ ] Hospedagem dos PDFs e imagens originais no GitHub (disponíveis no ZIP para importação).
 - [ ] Validação manual de cada um dos recortes e das classificações.
 - [ ] Inclusão de gabaritos definitivos de todas as provas, com fontes verificadas.
 - [ ] Serviço de sincronização de contas entre dispositivos.
 - [ ] Importação automática de PDFs arbitrários sem gerar previamente o pacote.
+
+## Correção e comentários: estado em 30/10/2026
+
+O aplicativo mantém questões originais separadas da camada de correção (corrections.js e correction-core.js). No modo estudo, o resultado aparece depois de confirmar a alternativa. No simulado, só aparece depois da finalização. O histórico permite consultar o comentário novamente.
+
+| Indicador | Quantidade |
+| --- | ---: |
+| Questões cadastradas | **1.280** |
+| Gabaritos oficiais válidos confirmados | **77** |
+| Questões anuladas oficialmente | **3** (13, 71, 72 de 2026) |
+| Posições cobertas pelo gabarito definitivo IADES 2026 | **80** |
+| Resoluções comentadas por alternativa | **8** |
+| Questões sem comentário técnico completo | **1.272** |
+| Questões sem gabarito oficial confirmado | **1.200** |
+
+Os comentários completos atuais correspondem às questões **1, 13, 66, 71, 72, 73, 74 e 78** da prova de 2026. Foram fundamentados em materiais do Ministério da Saúde, PNAB, COFEN 736/2024, AHA 2025 e documentos IADES de gabarito e recursos.
+
+Fontes oficiais: [Gabarito definitivo IADES 2026](https://www.iades.com.br/inscricao/upload/1364/202601289816794.pdf) e [justificativas de recursos](https://www.iades.com.br/inscricao/upload/1364/202601289849575.pdf).
+
+**Não há cobertura integral de comentários.** Questões pendentes mostram aviso claro, sem inventar resposta ou justificativa.
+
+Os testes automatizados estão em tests/ e são executados com `node --test tests/*.test.js` pela workflow .github/workflows/tests.yml. Incluem pontuação, anuladas, retificação, navegabilidade, simulado, visibilidade e histórico. A interface é testada em DOM simulado, e ainda precisa de testes manuais com navegadores reais.
 
 ## Política de integridade
 
