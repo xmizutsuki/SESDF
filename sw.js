@@ -1,5 +1,5 @@
-const CACHE='atlas-sesdf-web-v2';
-const BASE=['./','./index.html','./app.js','./styles.css','./data.js','./manifest.webmanifest','./icon.svg'];
+const CACHE='atlas-sesdf-web-v3';
+const BASE=['./','./index.html','./app.js','./history-core.js','./correction-core.js','./corrections.js','./styles.css','./data.js','./manifest.webmanifest','./icon.svg'];
 const ZIPLIB='https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';
 self.addEventListener('install',event=>{
  event.waitUntil((async()=>{const c=await caches.open(CACHE);await c.addAll(BASE);try{await c.add(ZIPLIB)}catch(e){}await self.skipWaiting()})());
