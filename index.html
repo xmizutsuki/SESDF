@@ -41,9 +41,8 @@
 </div>
 <div class="toast" role="status" id="toast"></div>
 <div class="hidden" aria-hidden="true"><span id="importstatus">Aguardando pacote…</span><div class="loading hidden" id="loading"><span></span></div></div>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
 <script src="./data.js" defer></script>
 <script src="./app.js" defer></script>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){})})}</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){reg.update().catch(function(){})}).catch(function(){})})}</script>
 </body>
 </html>
