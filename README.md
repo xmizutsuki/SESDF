@@ -2,7 +2,7 @@
 
 Aplicativo web responsivo para **Residência em Enfermagem**, reconstruído no repositório [xmizutsuki/SESDF](https://github.com/xmizutsuki/SESDF).
 
-**Atenção:** o código completo do aplicativo está no GitHub, mas o pacote com os PDFs e as imagens originais **não foi incluído no repositório**. Para carregar as 1.280 questões, utilize o novo arquivo `Atlas_IADES_1280_Questoes_Texto_Original_App.zip` ou, para o modo texto sem imagens, `atlas_iades_1280_transcritas.json`, entregues na conversa. O pacote pode ser importado diretamente pelo navegador, sem Python nem servidor local.
+**Atenção:** o código completo do aplicativo está no GitHub, mas o pacote com os PDFs e as imagens originais **não foi incluído no repositório**. Para carregar as 1.280 questões, utilize o novo arquivo `Atlas_IADES_IADES_1280_Transcricao_Integral.zip` ou, para o modo texto sem imagens, `atlas_iades_1280_transcritas.json`, entregues na conversa. O pacote pode ser importado diretamente pelo navegador, sem Python nem servidor local.
 
 ## Funcionalidades implementadas
 
@@ -22,9 +22,23 @@ Aplicativo web responsivo para **Residência em Enfermagem**, reconstruído no r
 
 ## Fidelidade aos PDFs
 
-O texto de cada questão foi extraído a partir da camada textual do PDF e agora **é exibido como texto selecionável**, com alternativas originais separadas. Não houve correção intencional de palavras, números ou pontuação. A imagem original também continua disponível no ZIP para conferência. A verificação humana individual de 1.280 transcrições ainda não foi concluída. Casos clínicos compartilhados, tabelas, gráficos e eventuais erros de digitação permanecem tal como estão no PDF.
+O texto de cada questão e os textos-base identificáveis foram extraídos a partir da camada textual do PDF e agora **é exibido como texto selecionável**, com alternativas originais separadas. Não houve correção intencional de palavras, números ou pontuação. A imagem original também continua disponível no ZIP para conferência. A verificação humana individual de 1.280 transcrições ainda não foi concluída. Casos clínicos compartilhados, tabelas, gráficos e eventuais erros de digitação permanecem tal como estão no PDF.
 
 A busca utiliza um índice de texto extraído automaticamente, **não revisado palavra por palavra**. Esse índice jamais substitui a página visual e nunca modifica os originais.
+
+
+## Para deixar as 1.280 questões disponíveis automaticamente no site
+
+O aplicativo detecta automaticamente o arquivo `atlas_iades_1280_transcritas.json` **na raiz do repositório**, caso seja publicado. Esse arquivo tem aproximadamente 2,7 MB e contém os 1.280 registros completos, com enunciados, alternativas, referências a páginas e textos-base associados, sem correção intencional da redação dos PDFs.
+
+1. Baixe o arquivo `atlas_iades_1280_transcritas.json` da conversa com o ChatGPT.
+2. Em **xmizutsuki/SESDF**, clique **Add file → Upload files** e selecione o JSON. Como não existe um arquivo com esse nome no repositório, ele será incluído como novo arquivo.
+3. Confirme **Commit changes** na branch `main`.
+4. Ao recarregar o site, o banco textual será carregado automaticamente, sem precisar escolher um arquivo.
+
+Para disponibilizar também as **imagens e os PDFs** no site, envie separadamente a pasta `assets/` do pacote. Sem essa pasta, as 1.280 questões continuam resolvíveis em texto e a área de referência visual informa que a imagem está ausente.
+
+O conector usado nesta sessão permitiu publicar o código e a interface, mas não transferir automaticamente os 2,7 MB do arquivo gerado localmente para o GitHub. **Até o upload descrito acima, o banco não está hospedado no repositório**; é possível usar a importação local de ZIP ou JSON na página.
 
 ## Como usar no computador ou celular
 
@@ -103,4 +117,4 @@ Não alterar enunciados, números, unidades, alternativas, gráficos, tabelas, o
 
 ## Transcrição textual: estado da verificação
 
-A extração automatizada identificou as **1.280 questões**, sendo **920 itens CERTO/ERRADO** e **360 questões de múltipla escolha**. As letras e a quantidade das alternativas foram conferidas automaticamente. Uma conferência humana integral, letra por letra, com as páginas visuais originais **não foi realizada**. Em caso de qualquer ambiguidade de extração, a página original do PDF continua sendo a referência. Não foi feita atualização de informações técnicas nem correção de erros da banca.
+A extração automatizada identificou as **1.280 questões** e 140 blocos de contextualização vinculados a itens seguintes, sendo **920 itens CERTO/ERRADO** e **360 questões de múltipla escolha**. As letras e a quantidade das alternativas foram conferidas automaticamente. Uma conferência humana integral, letra por letra, com as páginas visuais originais **não foi realizada**. Em caso de qualquer ambiguidade de extração, a página original do PDF continua sendo a referência. Não foi feita atualização de informações técnicas nem correção de erros da banca.
