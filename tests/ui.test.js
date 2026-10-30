@@ -18,7 +18,7 @@ function launch(seed){
  const storage={getItem(k){return stored[k]||null},setItem(k,v){stored[k]=v}};
  const sandbox={window:wnd,document:doc,localStorage:storage,console,setTimeout(){return 1},clearTimeout(){},setInterval(){return 1},clearInterval(){},confirm(){return true},Date,URL,Blob,Map,Set,Image:class{},navigator:{}};
  vm.createContext(sandbox);
- for(const file of ['corrections.js','correction-core.js','history-core.js','app.js'])vm.runInContext(read(file),sandbox,{filename:file});
+ for(const file of ['corrections.js','official-2018.js','research-answers.js','correction-core.js','history-core.js','app.js'])vm.runInContext(read(file),sandbox,{filename:file});
  const action=(action,other={})=>{assert.ok(listeners.click);listeners.click({target:{closest(){return{dataset:{action,...other}}}}})};
  return{nodes,stored,action,change:(id,value)=>{nodes[id]=Object.assign(nodes[id]||{},{value});listeners.change({target:{id,value}})},input:(id,value)=>{nodes[id]=Object.assign(nodes[id]||{},{value});listeners.input({target:{id,value}})},html:()=>nodes.content.innerHTML,view:()=>nodes['current-page'].textContent};
 }
@@ -51,7 +51,7 @@ test('questão anulada mostra anulação e não falsa correção',()=>{
  assert.match(a.html(),/Nenhuma alternativa é considerada correta/);
 });
 test('questão sem gabarito não inventa uma alternativa correta',()=>{
- const a=launch();a.action('openq',{id:'df2018-001'});a.action('draft',{value:'C'});a.action('submit');
+ const a=launch();a.action('openq',{id:'df2017u-011'});a.action('draft',{value:'C'});a.action('submit');
  assert.match(a.html(),/GABARITO NÃO LOCALIZADO/);
  assert.match(a.html(),/não será contada como acerto ou erro/);
 });
@@ -133,12 +133,12 @@ test('filtros do histórico por prova, resultado e período funcionam',()=>{
  const a=launch();
  a.action('openq',{id:'df2026-001'});a.action('draft',{value:'A'});a.action('submit');
  a.action('go',{page:'bank'});
- a.action('openq',{id:'df2018-001'});a.action('draft',{value:'C'});a.action('submit');
+ a.action('openq',{id:'df2017u-011'});a.action('draft',{value:'C'});a.action('submit');
  a.action('go',{page:'history'});
  assert.match(a.html(),/Questão 1/);
  a.change('histresult','errou');
  assert.match(a.html(),/1 registro\(s\)/);
- a.change('histexam','df2018');
+ a.change('histexam','df2017u');
  assert.match(a.html(),/Nenhuma tentativa corresponde aos filtros/);
  a.change('histresult','sem_gabarito');
  assert.match(a.html(),/1 registro\(s\)/);
@@ -174,4 +174,34 @@ test('o histórico permanece disponível após recarregar o aplicativo com o mes
  assert.match(b.html(),/Acertou/);
  b.action('histopen',{id:'df2026-001',attempt:'0'});
  assert.match(b.html(),/ACERTOU/);
+});
+
+test('resolução técnica não oficial aparece após responder e explica todas as alternativas',()=>{
+ const a=launch();
+ a.action('openq',{id:'sp2023-012'});
+ a.action('draft',{value:'A'});a.action('submit');
+ assert.match(a.html(),/RESOLUÇÃO TÉCNICA — NÃO OFICIAL/);
+ assert.match(a.html(),/Confiança da análise/);
+ assert.match(a.html(),/RESPOSTA TÉCNICA PROPOSTA — NÃO OFICIAL/);
+ assert.match(a.html(),/Lei nº 8.142/);
+ assert.match(a.html(),/Alternativa E/);
+});
+test('resolução ainda inexistente não inventa gabarito nem bloqueia avanço',()=>{
+ const a=launch();
+ a.action('openq',{id:'df2017u-011'});
+ a.action('draft',{value:'C'});a.action('submit');
+ assert.match(a.html(),/GABARITO NÃO LOCALIZADO/);
+ assert.match(a.html(),/não será contada como acerto ou erro/);
+ a.action('next');
+ assert.equal(a.view(),'Resolver');
+});
+test('página de gabaritos lista separadamente chave oficial e propostas técnicas não oficiais',()=>{
+ const a=launch();
+ a.action('go',{page:'keys'});
+ a.change('keyexam','df2024');
+ assert.match(a.html(),/respostas técnicas NÃO OFICIAIS/);
+ assert.match(a.html(),/2 C/);
+ a.change('keyexam','df2018');
+ assert.match(a.html(),/119 posições identificadas/);
+ assert.match(a.html(),/gabarito oficial/);
 });
