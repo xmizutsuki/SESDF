@@ -141,5 +141,6 @@ $('menutoggle').onclick=function(){$('sidebar').classList.toggle('open')};$('the
 window.addEventListener('resize',function(){if(page==='runner')drawQuestion()});
 document.documentElement.dataset.theme=S.theme;
 window.keyExam=null;
-if(window.IADES_DATA&&Array.isArray(window.IADES_DATA.questions)){installData(window.IADES_DATA);setStatus('Acervo hospedado no repositório carregado.',false);render()}else{setStatus('Abra o ZIP original do Atlas IADES para começar.',false);render();restoreZip()}
+async function carregarAcervoHospedado(){try{var response=await fetch('./atlas_iades_1280_transcritas.json',{cache:'no-store'});if(response.ok){var d=await response.json();if(d.questions&&d.questions.length===1280&&d.exams&&d.exams.length===13){installData(d);setStatus('1.280 questões em texto carregadas diretamente do repositório.',false);go('home');return}}}catch(error){}await restoreZip()}
+if(window.IADES_DATA&&Array.isArray(window.IADES_DATA.questions)){installData(window.IADES_DATA);setStatus('Acervo hospedado no repositório carregado.',false);render()}else{setStatus('Importe o ZIP ou JSON das 1.280 questões para começar.',false);render();carregarAcervoHospedado()}
 })();
