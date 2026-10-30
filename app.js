@@ -141,5 +141,5 @@ $('menutoggle').onclick=function(){$('sidebar').classList.toggle('open')};$('the
 window.addEventListener('resize',function(){if(page==='runner')drawQuestion()});
 document.documentElement.dataset.theme=S.theme;
 window.keyExam=null;
-setStatus('Abra o ZIP original do Atlas IADES para começar.',false);render();restoreZip();
+if(window.IADES_DATA&&Array.isArray(window.IADES_DATA.questions)){installData(window.IADES_DATA);setStatus('Acervo hospedado no repositório carregado.',false);render()}else{setStatus('Abra o ZIP original do Atlas IADES para começar.',false);render();restoreZip()}
 })();
