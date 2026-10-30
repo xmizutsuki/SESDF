@@ -2,7 +2,7 @@
 
 Aplicativo web responsivo para **Residência em Enfermagem**, reconstruído no repositório [xmizutsuki/SESDF](https://github.com/xmizutsuki/SESDF).
 
-**Atenção:** o código completo do aplicativo está no GitHub, mas o pacote com os PDFs e as imagens originais **não foi incluído no repositório**. Para carregar as 1.280 questões, utilize o arquivo de dados `Atlas_IADES_Banco_de_Questoes_1280.zip` entregue na conversa. O pacote pode ser importado diretamente pelo navegador, sem Python nem servidor local.
+**Atenção:** o código completo do aplicativo está no GitHub, mas o pacote com os PDFs e as imagens originais **não foi incluído no repositório**. Para carregar as 1.280 questões, utilize o novo arquivo `Atlas_IADES_1280_Questoes_Texto_Original_App.zip` ou, para o modo texto sem imagens, `atlas_iades_1280_transcritas.json`, entregues na conversa. O pacote pode ser importado diretamente pelo navegador, sem Python nem servidor local.
 
 ## Funcionalidades implementadas
 
@@ -22,7 +22,7 @@ Aplicativo web responsivo para **Residência em Enfermagem**, reconstruído no r
 
 ## Fidelidade aos PDFs
 
-O texto de cada questão **não é reescrito**. Em vez disso, o aplicativo desenha a imagem da página original extraída do PDF num canvas, permitindo ver o recorte da questão ou sua página completa. Casos clínicos compartilhados, tabelas, gráficos e eventuais erros de digitação permanecem tal como estão no PDF.
+O texto de cada questão foi extraído a partir da camada textual do PDF e agora **é exibido como texto selecionável**, com alternativas originais separadas. Não houve correção intencional de palavras, números ou pontuação. A imagem original também continua disponível no ZIP para conferência. A verificação humana individual de 1.280 transcrições ainda não foi concluída. Casos clínicos compartilhados, tabelas, gráficos e eventuais erros de digitação permanecem tal como estão no PDF.
 
 A busca utiliza um índice de texto extraído automaticamente, **não revisado palavra por palavra**. Esse índice jamais substitui a página visual e nunca modifica os originais.
 
@@ -30,7 +30,7 @@ A busca utiliza um índice de texto extraído automaticamente, **não revisado p
 
 1. Abra o aplicativo (após o GitHub Pages estar habilitado) ou baixe os arquivos deste repositório e abra `index.html`.
 2. Entre em **Importar PDFs**.
-3. Escolha o arquivo **Atlas_IADES_Banco_de_Questoes_1280.zip**.
+3. Escolha o novo **Atlas_IADES_1280_Questoes_Texto_Original_App.zip** (texto + imagens) ou o arquivo **atlas_iades_1280_transcritas.json** (somente texto).
 4. O aplicativo valida a contagem de questões, exibe as 13 provas e permite iniciar imediatamente.
 5. O pacote é guardado localmente no navegador, sempre que o armazenamento disponível permitir. Se o navegador limpar os dados, selecione o ZIP novamente.
 
@@ -64,7 +64,7 @@ Se o GitHub Pages estiver desabilitado, a URL acima não funcionará até que vo
 | --- | --- |
 | `index.html` | Interface principal e navegação |
 | `styles.css` | Aparência responsiva e temas |
-| `app.js` | Aplicativo de questões, banco, simulados, revisões, estatísticas, importação |
+| `app.js` | Aplicativo de questões, banco, simulados, revisões, estatísticas, importação ZIP/JSON e renderização textual |
 | `.github/workflows/pages.yml` | Publicação automática pelo GitHub Actions |
 | `README.md` | Instruções, limitações e regras de fidelidade |
 
@@ -87,10 +87,10 @@ Nas provas CERTO/ERRADO, utilize `C` para CERTO e `E` para ERRADO.
 ## Estado da entrega
 
 - [x] Código-fonte completo do app publicado no GitHub.
-- [x] Importação e leitura do pacote de 1.280 questões via navegador.
+- [x] Importação do pacote de 1.280 questões e das transcrições por JSON, com renderização textual dos enunciados e alternativas.
 - [x] Registro de tentativas, confiança, revisão, fragilidades e estatísticas.
 - [x] Workflow de implantação por Pages adicionada.
-- [ ] Upload dos PDFs e imagens originais ao repositório (46 MB no pacote completo).
+- [ ] Publicação direta no repositório dos PDFs, imagens originais e dados textuais (arquivos entregues separadamente).
 - [ ] Validação manual de cada um dos recortes e das classificações.
 - [ ] Inclusão de gabaritos definitivos de todas as provas, com fontes verificadas.
 - [ ] Serviço de sincronização de contas entre dispositivos.
@@ -100,3 +100,7 @@ Nas provas CERTO/ERRADO, utilize `C` para CERTO e `E` para ERRADO.
 
 Não alterar enunciados, números, unidades, alternativas, gráficos, tabelas, ordem ou digitação da banca. Comentários, etiquetas, classificações e correções são dados independentes. Nunca completar conteúdos que faltem no PDF por adivinhação.
 
+
+## Transcrição textual: estado da verificação
+
+A extração automatizada identificou as **1.280 questões**, sendo **920 itens CERTO/ERRADO** e **360 questões de múltipla escolha**. As letras e a quantidade das alternativas foram conferidas automaticamente. Uma conferência humana integral, letra por letra, com as páginas visuais originais **não foi realizada**. Em caso de qualquer ambiguidade de extração, a página original do PDF continua sendo a referência. Não foi feita atualização de informações técnicas nem correção de erros da banca.
