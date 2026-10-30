@@ -8,6 +8,7 @@ Aplicativo web responsivo para **Residência em Enfermagem**, reconstruído no r
 
 - Visão geral, meta diária e plano de estudo (50% fragilidades, 30% inéditas e 20% revisões, quando disponíveis).
 - Banco de questões com pesquisa e filtros por prova, ano, assunto e histórico.
+- Histórico completo e independente das estatísticas com filtros, todas as tentativas e revisão a qualquer momento.
 - Provas originais, preservando numeração e sequência.
 - Simulados personalizados com cronômetro e correção após o término.
 - Modos: questões inéditas, erradas, favoritas, difíceis e revisões.
@@ -110,6 +111,21 @@ Nas provas CERTO/ERRADO, utilize `C` para CERTO e `E` para ERRADO.
 - [ ] Inclusão de gabaritos definitivos de todas as provas, com fontes verificadas.
 - [ ] Serviço de sincronização de contas entre dispositivos.
 - [ ] Importação automática de PDFs arbitrários sem gerar previamente o pacote.
+
+## Histórico de questões respondidas
+
+O menu **Histórico de questões** permite rever respostas de qualquer sessão anterior, e não apenas os números de desempenho. Cada registro inclui prova/ano, número, data e hora, resposta dada, resultado conforme gabarito disponível, confiança e modo de estudo.
+
+- Filtros por prova, ano, assunto, resultado, intervalo de datas e busca textual.
+- Modos de visualização **última resposta por questão** ou **todas as tentativas**, preservando tentativas repetidas.
+- Visualização independente do enunciado original, alternativas, sua resposta registrada e explicações verificadas quando houver.
+- Alternância entre todas as tentativas da mesma questão, com resultados anteriores.
+- Notas pessoais e possibilidade de agendar uma revisão posteriormente.
+- Consulta sem gerar respostas novas, sem apagar registros e **sem substituir um simulado ativo**.
+- Para não antecipar a correção de um simulado aberto, o histórico oculta temporariamente o gabarito até que a prova termine.
+- Persistência no navegador e exportação/importação de backup JSON em Configurações. **Não existe sincronização automática entre dispositivos.**
+
+Arquivos principais: `history-core.js` (indexação e filtros), `app.js` (páginas e comandos), `styles.css` (interface), `tests/history.test.js` e `tests/ui.test.js` (testes).
 
 ## Correção e comentários: estado em 30/10/2026
 
