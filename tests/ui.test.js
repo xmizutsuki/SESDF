@@ -35,7 +35,7 @@ test('estudo livre revela imediatamente a resposta correta e explicações indiv
  const a=launch();
  a.action('openq',{id:'df2026-001'});
  a.action('draft',{value:'A'});
- a.nodes.confidence.value='certeza';
+ a.nodes.confidence={value:'certeza'};
  a.action('submit');
  const h=a.html();
  assert.match(h,/Sua resposta/);assert.match(h,/Resposta de referência/);
