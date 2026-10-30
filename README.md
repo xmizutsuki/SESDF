@@ -1,57 +1,90 @@
-# SESDF — Atlas IADES · Residência em Enfermagem
+# Atlas IADES — SESDF
 
-Repositório destinado ao **Atlas IADES**, banco de questões de Residência em Enfermagem.
+Aplicativo web responsivo para **Residência em Enfermagem**, reconstruído no repositório [xmizutsuki/SESDF](https://github.com/xmizutsuki/SESDF).
 
-## Fonte das questões
+**Atenção:** o código completo do aplicativo está no GitHub, mas o pacote com os PDFs e as imagens originais **não foi incluído no repositório**. Para carregar as 1.280 questões, utilize o arquivo de dados \`Atlas_IADES_Banco_de_Questoes_1280.zip\` entregue na conversa. O pacote pode ser importado diretamente pelo navegador, sem Python nem servidor local.
 
-O projeto original reúne **1.280 questões/itens em 13 provas**, com enunciados preservados nas imagens extraídas dos PDFs de origem. As provas incluem tanto questões objetivas quanto itens CERTO/ERRADO.
+## Funcionalidades implementadas
 
-**Não modificar ou reescrever questões.** Qualquer classificação, comentário, resposta ou gabarito deve ficar em dados separados da fonte original.
+- Visão geral, meta diária e plano de estudo (50% fragilidades, 30% inéditas e 20% revisões, quando disponíveis).
+- Banco de questões com pesquisa e filtros por prova, ano, assunto e histórico.
+- Provas originais, preservando numeração e sequência.
+- Simulados personalizados com cronômetro e correção após o término.
+- Modos: questões inéditas, erradas, favoritas, difíceis e revisões.
+- Revisão espaçada com intervalos adaptativos de 1, 3, 7, 14 e 30 dias.
+- Análise de fragilidades por assunto com requisito mínimo de cinco questões corrigidas distintas.
+- Estatísticas gerais e de primeiras tentativas.
+- Respostas com nível de confiança: certeza, dúvida ou chute.
+- Anotações, identificação de erro, favoritos e temas claros/escuros.
+- Importação de gabaritos por prova, mantendo fonte e versão em registro separado.
+- Backup/exportação e restauração do histórico em JSON.
+- Importação do ZIP no navegador, com armazenamento opcional via IndexedDB.
 
-## Aplicativo de estudo
+## Fidelidade aos PDFs
 
-A página `index.html` inclui um **leitor de pacote ZIP local**, para abrir o pacote `Atlas_IADES_Banco_de_Questoes_1280.zip` gerado a partir dos PDFs. Ele:
-- lê o índice `data.js` contido no pacote;
-- apresenta as imagens originais das questões, seus textos-base e a página integral;
-- permite filtrar por ano, prova, assunto e texto;
-- salva respostas, marcações e revisões localmente no navegador;
-- **não atribui acerto/erro sem gabarito validado**.
+O texto de cada questão **não é reescrito**. Em vez disso, o aplicativo desenha a imagem da página original extraída do PDF num canvas, permitindo ver o recorte da questão ou sua página completa. Casos clínicos compartilhados, tabelas, gráficos e eventuais erros de digitação permanecem tal como estão no PDF.
 
-O pacote completo contém também PDFs, imagens, banco SQLite e o aplicativo offline mais completo.
+A busca utiliza um índice de texto extraído automaticamente, **não revisado palavra por palavra**. Esse índice jamais substitui a página visual e nunca modifica os originais.
 
-### Usar sem precisar instalar nada
+## Como usar no computador ou celular
 
-Abra `index.html` num navegador recente (Chrome/Edge). Escolha o ZIP do projeto pelo seletor da página. Os dados são processados localmente, sem enviar seus PDFs para servidores. Após importar, a página pode lembrar do ZIP no armazenamento local do navegador.
+1. Abra o aplicativo (após o GitHub Pages estar habilitado) ou baixe os arquivos deste repositório e abra \`index.html\`.
+2. Entre em **Importar PDFs**.
+3. Escolha o arquivo **Atlas_IADES_Banco_de_Questoes_1280.zip**.
+4. O aplicativo valida a contagem de questões, exibe as 13 provas e permite iniciar imediatamente.
+5. O pacote é guardado localmente no navegador, sempre que o armazenamento disponível permitir. Se o navegador limpar os dados, selecione o ZIP novamente.
 
-### Publicar a versão completa do aplicativo
+**O ZIP não é enviado ao GitHub nem ao servidor do site.** O estudo, o progresso, as imagens e o gabarito importado permanecem locais no seu navegador. Para continuar em outro dispositivo, exporte o backup em Configurações e importe-o no outro dispositivo.
 
-O pacote completo tem cerca de 45 MB e **não foi transferido por este conector GitHub nesta etapa**. Para publicar todos os arquivos no repositório usando Git, extraia o ZIP no computador e execute, na pasta extraída:
+## Publicação no GitHub Pages
 
-```bash
-git clone https://github.com/xmizutsuki/SESDF.git
-# Copie para o clone os arquivos do ZIP (index.html, app.js, style.css, data.js, assets/ etc.).
-cd SESDF
-git add .
-git commit -m "Publicar Atlas IADES com as provas originais"
-git push origin main
-```
+A workflow \`.github/workflows/pages.yml\` prepara a implantação automática. Na primeira utilização, pode ser necessário selecionar **Settings → Pages → Build and deployment → GitHub Actions** no repositório. Verifique o resultado em **Actions**.
 
-Atenção: o `index.html` da versão completa substituirá este leitor inicial; mantenha uma cópia se quiser os dois modos de uso. Para publicar via GitHub Pages, ative Pages em Settings > Pages após a instalação.
+Endereço previsto após uma implantação bem-sucedida:
 
-## Regras
+https://xmizutsuki.github.io/SESDF/
 
-1. Nunca completar questões ilegíveis com texto gerado por IA.
-2. Associar cada questão à página original.
-3. Preservar a ordem das alternativas.
-4. Não supor gabarito se não houver fonte confiável.
-5. Diferenciar análises/revisões do texto original.
-6. Garantir que documentos com dados pessoais não sejam publicados.
+Se o GitHub Pages estiver desabilitado, a URL acima não funcionará até que você o habilite.
 
-## Estado
+## Estrutura do repositório
 
-- [x] Repositório correto identificado: `xmizutsuki/SESDF`
-- [x] Leitor para abrir o ZIP original sem alterar as questões
-- [ ] Upload de todos os PDFs/imagens e do aplicativo completo ao GitHub
-- [ ] Gabaritos oficiais para todas as provas
-- [ ] Conferência manual de 100% dos recortes
+| Arquivo | Objetivo |
+| --- | --- |
+| \`index.html\` | Interface principal e navegação |
+| \`styles.css\` | Aparência responsiva e temas |
+| \`app.js\` | Aplicativo de questões, banco, simulados, revisões, estatísticas, importação |
+| \`.github/workflows/pages.yml\` | Publicação automática pelo GitHub Actions |
+| \`README.md\` | Instruções, limitações e regras de fidelidade |
+
+O processamento de ZIP utiliza **JSZip 3.10.1** via CDN (carregamento inicial exige internet se a biblioteca ainda não estiver em cache). Para uso sem internet garantido, mantenha o pacote de aplicativo offline distribuído separadamente.
+
+## Gabaritos
+
+O banco original não inclui gabaritos oficiais conferidos para todas as provas. Por isso, **nenhuma resposta será inventada**. A correção só é ativada quando você cadastra um gabarito, que será identificado como fonte declarada pelo usuário. Questões anuladas devem ser marcadas com \`#\`; elas ficam fora do cálculo de acertos.
+
+Formatação aceita (uma por linha):
+
+\`\`\`text
+1 A
+2 D
+3 #
+\`\`\`
+
+Nas provas CERTO/ERRADO, utilize \`C\` para CERTO e \`E\` para ERRADO.
+
+## Estado da entrega
+
+- [x] Código-fonte completo do app publicado no GitHub.
+- [x] Importação e leitura do pacote de 1.280 questões via navegador.
+- [x] Registro de tentativas, confiança, revisão, fragilidades e estatísticas.
+- [x] Workflow de implantação por Pages adicionada.
+- [ ] Upload dos PDFs e imagens originais ao repositório (46 MB no pacote completo).
+- [ ] Validação manual de cada um dos recortes e das classificações.
+- [ ] Inclusão de gabaritos definitivos de todas as provas, com fontes verificadas.
+- [ ] Serviço de sincronização de contas entre dispositivos.
+- [ ] Importação automática de PDFs arbitrários sem gerar previamente o pacote.
+
+## Política de integridade
+
+Não alterar enunciados, números, unidades, alternativas, gráficos, tabelas, ordem ou digitação da banca. Comentários, etiquetas, classificações e correções são dados independentes. Nunca completar conteúdos que faltem no PDF por adivinhação.
 
