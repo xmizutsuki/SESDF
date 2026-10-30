@@ -1,4 +1,4 @@
-const CACHE='atlas-sesdf-web-v1';
+const CACHE='atlas-sesdf-web-v2';
 const BASE=['./','./index.html','./app.js','./styles.css','./data.js','./manifest.webmanifest','./icon.svg'];
 const ZIPLIB='https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';
 self.addEventListener('install',event=>{
