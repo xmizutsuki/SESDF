@@ -1,0 +1,26 @@
+name: Testes Atlas IADES — correção e interface
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sintaxe do aplicativo
+        run: |
+          node --check app.js
+          node --check correction-core.js
+          node --check corrections.js
+      - name: Testes de gabarito e interface
+        run: node --test tests/*.test.js
